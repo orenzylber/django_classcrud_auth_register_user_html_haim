@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="Permissions-Policy" content="interest-cohort=()" />
+    <script src="https://cdn.jsdelivr.net/npm/axios@1.1.2/dist/axios.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous" />
+    <title>Document</title>
+
+    <style>
+      /* Body Styles */
+body {
+  background-color: #f5f5f5;
+  color: #333;
+  font-family: "Roboto", sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+/* Input Group Styles */
+.input-group {
+  margin-top: 50px;
+  margin-bottom: 50px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.input-group input[type="text"],
+.input-group input[type="number"],
+.input-group input[type="email"] {
+  background-color: #f5f5f5;
+  color: #333;
+  border: none;
+  border-radius: 0;
+  border-bottom: 2px solid #00b894;
+  font-size: 16px;
+  padding: 10px;
+  margin-bottom: 20px;
+  width: 30%;
+}
+
+.input-group input[type="file"] {
+  border-bottom: none;
+  padding-bottom: 10px;
+  color: #009e74;
+}
+
+.input-group button {
+  background-color: #00b894;
+  color: #fff;
+  border: none;
+  border-radius: 0;
+  font-size: 16px;
+  padding: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease-in-out;
+  width: 100%;
+}
+
+.input-group button:hover {
+  background-color: #009e74;
+}
+
+/* Table Styles */
+.table {
+  background-color: #f5f5f5;
+  color: #333;
+  border: none;
+  font-size: 14px;
+}
+
+.table th,
+.table td {
+  text-align: center;
+  vertical-align: middle;
+  border: none;
+}
+
+.table th {
+  background-color: #00b894;
+  color: #fff;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-weight: 500;
+  font-size: 12px;
+}
+
+.table td {
+  padding: 10px;
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+  background-color: #e0e0e0;
+}
+
+.table-striped tbody tr:hover {
+  background-color: #c5c5c5;
+  transition: all 0.3s ease-in-out;
+}
+
+.table button {
+  border: none;
+  border-radius: 0;
+  font-size: 14px;
+  padding: 5px 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease-in-out;
+}
+
+.table button.btn-danger {
+  background-color: #e74c3c;
+  color: #fff;
+}
+
+.table button.btn-primary {
+  background-color: #00b894;
+  color: #fff;
+}
+
+.table button:hover {
+  background-color: #009e74;
+  transition: all 0.3s ease-in-out;
+}
+
+    </style>
+
+</head>
+
+<body>
+    <div class="input-group">
+        <input type="text" placeholder="Student Name" class="form-control" id="sname" />
+        <input type="number" placeholder="Student Age" class="form-control" id="sage" />
+        <input type="text" placeholder="Student mail" class="form-control" id="email" />
+        <!--form - for file POST request-->
+        <form action="/upload" method="POST" enctype="multipart/form-data">
+            <input type="file" placeholder="Profile Picture" class="form-control" id="spic" />
+        </form>
+        <!--/form - for file POST request-->
+        <button type="button" class="btn btn-outline-primary" onclick="addstudent()">
+            Add
+        </button>
+    </div>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th scope="col" style="text-align: center">Student Name</th>
+                <th scope="col" style="text-align: center">Student Age</th>
+                <th scope="col" style="text-align: center">email</th>
+                <th scope="col" style="text-align: center">picture</th>
+                <th scope="col" style="text-align: center">ID</th>
+                <th scope="col" style="text-align: center">Update</th>
+                <th scope="col" style="text-align: center">Delete</th>
+            </tr>
+        </thead>
+        <tbody id="display">
+            <!--here the innerhtml table-->
+        </tbody>
+    </table>
+
+    <script>
+        // const MY_SERVER = "http://127.0.0.1:8000/"; // had to add last slash else I receive CORS error
+        const MY_SERVER = "https://django-classcrud-auth-register-user-html.onrender.com/"; // had to add last slash else I receive CORS error
+        // const IMGSRV = "https://django-classcrud-auth-register-user-html.onrender.com"; // had to add last slash else I receive CORS error
+
+        let token = localStorage.getItem("localval")
+        const loadData = async () => {
+            const config = { headers: { Authorization: `Bearer ${token}` } };
+            res = await axios.get(MY_SERVER + "students/", config);
+            display.innerHTML = "";
+            res.data.forEach((element) => {
+                row = `<td style="text-align:center;">${element.name}</td>
+                <td style="text-align:center;">${element.age}</td>
+                <td style="text-align:center;">${element.email}</td>
+                
+                
+                <td style="text-align:center;"><img src=https://django-classcrud-auth-register-user-html.onrender.com${element.image} width="200" height="100"></td>
+                <td style="text-align:center;">${element.id}</td>
+                <td style="text-align:center;"><button type="button" class="btn btn-warning" onclick="upstudent(${element.id})">Update</button></td>
+                <td style="text-align:center;"><button type="button" class="btn btn-danger" onclick="delstudent(${element.id})">Delete</button></td>`;
+
+                display.innerHTML += row;
+            });
+        };
+        
+        // belongs to rows 180 +181 it is disabled because we dont have render yet!
+        // <td style="text-align:center;"><img src=${IMGSRV}${element.image} width="200" height="100"></td>
+        // <td style="text-align:center;"><img src=http://127.0.0.1:8000${element.image} width="200" height="100"></td>
+
+        function delstudent(id) {
+            const config = { headers: { Authorization: `Bearer ${token}` } };
+            axios
+                .delete(MY_SERVER + "students/" + id, config)
+                .then((result) => {
+                    console.log(result.data);
+                    loadData();
+                })
+                .catch((error) => console.log(error));
+        }
+
+        const upstudent = (id) => {
+            const config = { headers: { Authorization: `Bearer ${token}` } };
+            const formData = new FormData();
+            formData.append("name", sname.value);
+            formData.append("age", sage.value);
+            formData.append("email", email.value);
+            formData.append("image", spic.files[0]);
+
+            axios.put(MY_SERVER + "students/" + id, formData, config).then((result) => {loadData()})
+                .catch((error) => console.log(error));
+        };
+
+        const addstudent = () => {
+            const config = { headers: { Authorization: `Bearer ${token}` } };
+            const formData = new FormData();
+            formData.append("name", sname.value);
+            formData.append("age", sage.value);
+            formData.append("email", email.value);
+            formData.append("image", spic.files[0]);
+            axios.post(MY_SERVER + "students/", formData, config).then((r) => loadData());
+
+        };
+        loadData()
+
+
+    </script>
+</body>
+
+</html>

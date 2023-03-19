@@ -25,3 +25,9 @@ Django 3.2 or higher
 
 ### Credits
 This project was created by haim skira with my best friend ChatGPT and is licensed under the MIT License
+
+### Netlify site:
+https://willowy-pasca-069a8c.netlify.app/
+
+### Render (back):
+https://django-classcrud-auth-register-user-html.onrender.com
