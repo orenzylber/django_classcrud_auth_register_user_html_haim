@@ -1,0 +1,10 @@
+pip install virtualenv (once per computer)
+python -m virtualenv myenv (once per project)
+myenv\Scripts\activate  (Activate)
+
+pip install django
+django-admin startproject myproj .    (the dot is part of the command)
+django-admin startapp base	(create application)
+py manage.py runserver  (run the server)
+
+py manage.py createsuperuser	

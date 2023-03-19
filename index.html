@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <meta http-equiv="Permissions-Policy" content="interest-cohort=()" />
+    <script src="https://cdn.jsdelivr.net/npm/axios@1.1.2/dist/axios.min.js"></script>
+
+    <meta charset="UTF-8">
+    <title>Login Page</title>
+    <style>
+        /* Body Styles */
+  body {
+    background-color: #f5f5f5;
+    color: #333;
+    font-family: "Roboto", sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+  }
+  
+  /* Input Group Styles */
+  .input-group {
+    margin-top: 50px;
+    margin-bottom: 50px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .input-group input[type="text"],
+  .input-group input[type="password"],
+  .input-group input[type="number"],
+  .input-group input[type="email"],
+  .input-group input[type="file"] {
+    background-color: #f5f5f5;
+    color: #333;
+    border: none;
+    border-radius: 0;
+    border-bottom: 2px solid #00b894;
+    font-size: 16px;
+    padding: 10px;
+    margin-bottom: 20px;
+    width: 10%;
+  }
+  
+  .input-group input[type="file"] {
+    border-bottom: none;
+    padding-bottom: 10px;
+    color: #009e74;
+  }
+  
+  .input-group button {
+    background-color: #00b894;
+    color: #fff;
+    border: none;
+    border-radius: 100;
+    font-size: 16px;
+    padding: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out;
+    width: 30%;
+  }
+  
+  .input-group button:hover {
+    background-color: #009e74;
+  }
+  
+  /* Table Styles */
+  .table {
+    background-color: #f5f5f5;
+    color: #333;
+    border: none;
+    font-size: 14px;
+  }
+  
+  .table th,
+  .table td {
+    text-align: center;
+    vertical-align: middle;
+    border: none;
+  }
+  
+  .table th {
+    background-color: #00b894;
+    color: #fff;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-weight: 500;
+    font-size: 12px;
+  }
+  
+  .table td {
+    padding: 10px;
+  }
+  
+  .table-striped tbody tr:nth-of-type(odd) {
+    background-color: #e0e0e0;
+  }
+  
+  .table-striped tbody tr:hover {
+    background-color: #c5c5c5;
+    transition: all 0.3s ease-in-out;
+  }
+  
+  .table button {
+    border: none;
+    border-radius: 10;
+    font-size: 14px;
+    padding: 5px 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out;
+  }
+  
+  .table button.btn-danger {
+    background-color: #e74c3c;
+    color: #fff;
+  }
+  
+  .table button.btn-primary {
+    background-color: #00b894;
+    color: #fff;
+  }
+  
+  .table button:hover {
+    background-color: #009e74;
+    transition: all 0.3s ease-in-out;
+  }
+  
+      </style>
+  
+</head>
+
+<body>
+
+    <div class="input-group">
+        <h1 >Login </h1>
+        <label for="user">Username:</label>
+        <input type="text" id="username" name="username" required>
+
+        <label for="pwd">Password:</label>
+        <input type="password" id="password" name="pwd" required>
+
+        <button value="Login" onclick="login()">Login</button>
+        
+        <button><a href="register.html">Register</a></button>
+
+    </div>
+    <script>
+
+        const MY_SERVER = "http://127.0.0.1:8000"
+        // const MY_SERVER = "https://django-crud-kbs9.onrender.com";
+        let token = ""
+        const login = async () => {
+            res = await axios.post(MY_SERVER + "/login/", {
+                "username": username.value,
+                "password": password.value
+                
+            });
+            token = res.data.access
+            console.log(res.data.access);
+            localStorage.setItem('localval', token)
+            window.location.href = "home.html"
+        }
+
+    </script>
+</body>
+
+</html>
